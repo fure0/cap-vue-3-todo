@@ -5,10 +5,11 @@
 </template>
 
 <script>
-import { onBeforeMount, ref } from 'vue'
 import TodoHeader from '@/components/TodoHeader.vue';
 import TodoInput from './components/TodoInput.vue';
 import TodoList from './components/TodoList.vue';
+import { useTodo } from './hooks/useTodo';
+import { onBeforeMount } from 'vue';
 
   export default {
     components: {
@@ -22,29 +23,15 @@ import TodoList from './components/TodoList.vue';
       }
     },
     setup() {
-      const todoItems = ref([]);
+      const { todoItems, fetchTodos, addTodoItem } = useTodo();
 
-      function fetchTodos() {
-        const result = [];
-        for (let i = 0; i < localStorage.length; i++) {
-          const todoItem = localStorage.key(i);
-          result.push(todoItem);
-        }
-        return result;
-      }
-
-      console.log("setup called");
-      
       onBeforeMount(() => {
         console.log("onBeforeMount called");
         todoItems.value = fetchTodos();
       })
-
-      function addTodoItem(todo) {
-        todoItems.value.push(todo);
-        localStorage.setItem(todo, todo);
-      }
-
+      
+      console.log("setup called");
+      
       return { todoItems, addTodoItem }
     },
     methods: {
