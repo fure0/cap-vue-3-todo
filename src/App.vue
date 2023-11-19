@@ -1,11 +1,11 @@
 <template>
-  <TodoHeader></TodoHeader>
+  <TodoHeader :appTitle="title"></TodoHeader>
   <TodoInput @add="addTodoItem"></TodoInput>
   <TodoList :todoItems="todoItems" @remove="removeTodoItem"></TodoList>
 </template>
 
 <script>
-import { ref } from 'vue'
+import { onBeforeMount, ref } from 'vue'
 import TodoHeader from '@/components/TodoHeader.vue';
 import TodoInput from './components/TodoInput.vue';
 import TodoList from './components/TodoList.vue';
@@ -15,6 +15,11 @@ import TodoList from './components/TodoList.vue';
       TodoHeader,
       TodoInput,
       TodoList,
+    },
+    data() {
+      return {
+        title: '할일 앱'
+      }
     },
     setup() {
       const todoItems = ref([]);
@@ -27,7 +32,13 @@ import TodoList from './components/TodoList.vue';
         }
         return result;
       }
-      todoItems.value = fetchTodos();
+
+      console.log("setup called");
+      
+      onBeforeMount(() => {
+        console.log("onBeforeMount called");
+        todoItems.value = fetchTodos();
+      })
 
       function addTodoItem(todo) {
         todoItems.value.push(todo);
